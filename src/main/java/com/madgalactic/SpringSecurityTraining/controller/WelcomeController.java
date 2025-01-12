@@ -1,4 +1,4 @@
-package com.madgalactic.SpringSecurityTraining;
+package com.madgalactic.SpringSecurityTraining.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.GetMapping;

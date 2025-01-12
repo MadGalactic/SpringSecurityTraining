@@ -1,12 +1,20 @@
 package com.madgalactic.SpringSecurityTraining.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 
@@ -19,6 +27,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity /* To avoid implementing the default Spring security configurations, use this annotation. It is basically saying ignore the default flow, follow this flow instead */
 public class SecurityConfig {
+
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     /* This method returns the object of security filter chain*/
     @Bean
@@ -35,27 +46,30 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                         .build();
 
-
-        //disable csrf
-//        http.csrf(customizer -> customizer.disable()); /* In this step, you are passing the customizer in the method */
-//        http.authorizeHttpRequests(request -> request.anyRequest().authenticated()); /* lambda expression says that for every request, requests need to be authenticated. with this, no one should be able to access the page without authentication*/
-//        http.formLogin(Customizer.withDefaults()); /* form login implementation*/
-//        http.httpBasic(Customizer.withDefaults()); /* for rest api access */
-//        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); /* if you make your session stateless, you don't need to worry about the session ID.*/
-
-
-        // another way to disable csrf
-//        Customizer<CsrfConfigurer<HttpSecurity>> custCsrf = new Customizer<CsrfConfigurer<HttpSecurity>>() {
-//            @Override
-//            public void customize(CsrfConfigurer<HttpSecurity> customizer) {
-//                customizer.disable();
-//            }
-//        };
-
-//        http.csrf(custCsrf);
-
-//        return http.build(); /* the build method allows you to return the security filter chain */
     }
 
+    //create a bean to change the authentication provider
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        provider.setUserDetailsService(userDetailsService);
+        return provider;
+
+
+    }
+//    @Bean
+//    public UserDetailsService userDetailsService () {
+//
+//        UserDetails user1 = User
+//                .withDefaultPasswordEncoder()
+//                .username("jane")
+//                .password("abc123")
+//                .roles("USER")
+//                .build();
+//
+//
+//        return new InMemoryUserDetailsManager(user1);
 
 }

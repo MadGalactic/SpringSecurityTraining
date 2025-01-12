@@ -1,4 +1,4 @@
-package com.madgalactic.SpringSecurityTraining;
+package com.madgalactic.SpringSecurityTraining.model;
 
 public class Student {
 
