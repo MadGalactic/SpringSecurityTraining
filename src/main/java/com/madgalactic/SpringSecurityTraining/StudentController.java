@@ -29,7 +29,9 @@ public class StudentController {
     can get a lot of data, including session ID and the token. With this request object, you can apply one of the many request methods,
     getAttribute. The attribute name can be found in the view page.
 
-    Get attribute gives you a type of Object, and we want a token. Simply type cast
+    Get attribute gives you a type of Object, and we want a token. Simply type cast.
+
+    Another alternative, not shown in this step, you can disable it and generate a new session, make the http stateless.
      */
    @GetMapping("/csrf-token")
     public CsrfToken getCsrfToken(HttpServletRequest request){
