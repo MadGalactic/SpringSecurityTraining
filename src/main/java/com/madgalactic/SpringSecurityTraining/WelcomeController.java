@@ -1,5 +1,6 @@
 package com.madgalactic.SpringSecurityTraining;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -7,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class WelcomeController {
 
     @GetMapping("/")
-    public String hello() {
-        return "Welcome to Mars";
+    public String hello(HttpServletRequest request) {
+        return "Welcome to Mars" + request.getSession().getId();
     }
 
 }
